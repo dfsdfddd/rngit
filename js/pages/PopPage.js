@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
 // 导入 react-navigarion
-import {createMaterialTopTabNavigator} from 'react-navigation';
+import {createMaterialTopTabNavigator,createAppContainer} from 'react-navigation';
 
 // 导入工具类
 
@@ -43,11 +43,41 @@ const TopTabNavigator = createMaterialTopTabNavigator({
 })
 // 主体导出组件
 export default class PopPage extends Component {
+  constructor(props){
+    super(props);
+    this.tabsName = ['Java','Android','React','React-native','Php','Vue'];
+  }
   static router =  TopTabNavigator.router
+
+  _genTab(){
+    const tabs = {}
+    this.tabsName.forEach((item,index) => {
+      tabs[`tab${index}`] = {
+        screen: props => <PopTab {...props} tabLabel={item}/>, // 这是个不错的技巧
+        navigationOptions:{
+          title:item
+        }
+      }
+    });
+    return tabs
+  }
   render() {
     // 使用路由，并且传递navigation 到新创建的路由
+    const TopTabNav = createAppContainer(createMaterialTopTabNavigator(this._genTab(),{
+      tabBarOptions:{
+        tabStyle: styles.tabStyle,
+        upperCaseLabel: false,
+        scrollEnabled: true,
+        style: {
+          backgroundColor: '#678'
+        },
+        indicatorStyle:styles.indicatorStyle,
+        labelStyle: styles.labelStyle
+      }
+    }))
     return  <View style={{flex:1,marginTop:30}}>
-      <TopTabNavigator navigation={this.props.navigation}/>
+      {/* <TopTabNavigator navigation={this.props.navigation}/> */}
+      <TopTabNav/>
     </View>
   }
 }
@@ -65,5 +95,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     margin: 10,
+  },
+  tabStyle:{
+    minWidth:50
+  },
+  indicatorStyle:{
+    height:2,
+    backgroundColor:'white'
+  },
+  labelStyle:{
+    fontSize:13,
+    marginTop:6,
+    marginBottom:6
   }
 });

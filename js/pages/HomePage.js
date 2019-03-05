@@ -171,10 +171,10 @@ export default class HomePage extends Component {
     /**
      * 第二种
      */
-    const Tab = this._tabNavigator()
-    return <Tab/>
+    // const Tab = this._tabNavigator()
+    // return <Tab/>
 
-    // return <DynamicTabNavigator/>
+    return <DynamicTabNavigator/>
   }
 }
 
