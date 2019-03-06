@@ -47,7 +47,7 @@ export default class PopPage extends Component {
     super(props);
     this.tabsName = ['Java','Android','React','React-native','Php','Vue'];
   }
-  static router =  TopTabNavigator.router
+  // static router =  TopTabNavigator.router
 
   _genTab(){
     const tabs = {}

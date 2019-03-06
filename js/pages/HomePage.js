@@ -141,6 +141,10 @@ const TestNav = createBottomTabNavigator({
 
 // 主体默认导出
 export default class HomePage extends Component {
+  constructor(props){
+    super(props)
+    console.disableYellowBox = true
+  }
 
   /**
    * 第二种引入嵌套路由的方式 官网说这个引入方式是错误的，但没报错

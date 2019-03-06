@@ -3,7 +3,8 @@ import {
   createStackNavigator,
   createSwitchNavigator,
   createMaterialTopTabNavigator,
-  createBottomTabNavigator
+  createBottomTabNavigator,
+  createAppContainer
 } from 'react-navigation';
 
 
@@ -76,7 +77,7 @@ const MainNavigator = createStackNavigator({
 
 
 // defaultNavigationOptions
-export default createSwitchNavigator({
+export default createAppContainer(createSwitchNavigator({
   Init:InitNavigator,
   Main:MainNavigator
 },{
@@ -84,3 +85,4 @@ export default createSwitchNavigator({
     header: null
   }
 })
+)
