@@ -10,7 +10,7 @@ export default class FavoriterPage extends Component {
         <Text style={styles.welcome}>FavoriterPage</Text>
         <Button
           title={'改变主题颜色'}
-          onpress={()=>{
+          onPress={()=>{
             navigation.setParams({
               theme:{
                 tintColor: 'green',

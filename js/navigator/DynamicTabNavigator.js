@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
+import {connect} from 'react-redux';
 
 // 导入页面
 import PopPage from '../pages/PopPage';
@@ -152,12 +153,12 @@ class TabBarComponent extends Component{
   render(){
     return <BottomTabBar
       {...this.props}
-      activeTintColor = {'red'}
+      activeTintColor = {this.props.theme}
     />
   }
 }
 // 主体默认导出
-export default class DynamicTabNavigator extends Component {
+class DynamicTabNavigator extends Component {
 
   /**
    * 第二种引入嵌套路由的方式 官网说这个引入方式是错误的，但没报错
@@ -168,7 +169,9 @@ export default class DynamicTabNavigator extends Component {
     const tabss = {PopPage,TrendingPage,FavoriterPage,MyPage} // 动态配置tab属性
     PopPage.navigationOptions.tabBarLabel= 'sb'
     return createAppContainer(createBottomTabNavigator(tabss,{
-      tabBarComponent:TabBarComponent
+      tabBarComponent: props => {
+        return <TabBarComponent theme={this.props.theme} {...props}/>
+      }
     }))
   }
   /**
@@ -197,17 +200,12 @@ export default class DynamicTabNavigator extends Component {
 }
 
 
+const mapStateToProps = (state) => {
+  console.log(state)
+  // 尖头函数返回对象 需（）
+  return ({
+    theme: state.theme.theme,
+  });
+}
 
-const styles = StyleSheet.create({
-  container: {
-  flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  }
-});
+export default connect(mapStateToProps)(DynamicTabNavigator)
