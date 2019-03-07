@@ -3,8 +3,20 @@ import {applyMiddleware, createStore} from 'redux';
 import reducers from '../reducer';
 import {middleware} from '../navigator/AppNavigator';
 
+// 日志打印中间件
+const logger=store=>next=>action=>{
+  if(typeof action === 'function'){
+    console.log('dispatch a function');
+  } else {
+    console.log('dispatch', action);
+  }
+  const result = next(action);
+  console.log('nextState', store.getState())
+}
+
 const middlewares = [
-  middleware
+  middleware,
+  logger
 ]
 
 /**
