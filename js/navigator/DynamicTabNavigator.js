@@ -165,10 +165,14 @@ class DynamicTabNavigator extends Component {
    * 这种方式页面会有黄色警告
    */
   _tabNavigator(){
+    // 当跟新theme的状态的时候会重新渲染，所以先判断是否存在存在就用原来的
+    if(this.Tabss){
+      return this.Tabss;
+    }
     const {PopPage,FavoriterPage,TrendingPage,MyPage} = TABSB
     const tabss = {PopPage,TrendingPage,FavoriterPage,MyPage} // 动态配置tab属性
     PopPage.navigationOptions.tabBarLabel= 'sb'
-    return createAppContainer(createBottomTabNavigator(tabss,{
+    return this.Tabss = createAppContainer(createBottomTabNavigator(tabss,{
       tabBarComponent: props => {
         return <TabBarComponent theme={this.props.theme} {...props}/>
       }
