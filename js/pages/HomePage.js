@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import { BackHandler } from 'react-native'; // android 后退需要
+
+import {connect} from 'react-redux';
 
 // 导入页面
 import PopPage from './PopPage';
@@ -15,7 +17,8 @@ import Entypo from 'react-native-vector-icons/Entypo';
 // 导入 react-navigation
 import {
   createBottomTabNavigator,
-  createAppContainer
+  createAppContainer,
+  NavigationActions // android 后退需要
 } from 'react-navigation';
 import NavigationUtil from '../navigator/NavigationUtil';
 
@@ -140,12 +143,28 @@ const TestNav = createBottomTabNavigator({
 })
 
 // 主体默认导出
-export default class HomePage extends Component {
+class HomePage extends Component {
   constructor(props){
     super(props)
     console.disableYellowBox = true
   }
+  componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
+  }
 
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
+  }
+  onBackPress = () => {
+    const { dispatch, nav } = this.props;
+    // if (nav.index === 0) {
+    if (nav.routes[1].index === 0) { // Main 本来是1的index 如果是0的话就不返回
+      return false;
+    }
+
+    dispatch(NavigationActions.back());
+    return true;
+  };
   /**
    * 第二种引入嵌套路由的方式 官网说这个引入方式是错误的，但没报错
    * 这种方式页面会有黄色警告
@@ -182,16 +201,8 @@ export default class HomePage extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-  flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  }
-});
+const mapStateToProps = (state) => ({
+  nav: state.nav
+})
+
+export default connect(mapStateToProps)(HomePage)
