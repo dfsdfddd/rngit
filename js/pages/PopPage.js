@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, Button} from 'react-native';
 
 // 导入 react-navigarion
 import {createMaterialTopTabNavigator,createAppContainer} from 'react-navigation';
@@ -21,6 +21,30 @@ class PopTab extends Component {
             navigation: this.props.navigation
           },'DetailPage')
         }}>跳转到详情页面</Text>
+        <Button
+          title={'fetchdemo'}
+          onPress={()=>{
+            NavigationUtil.goPage({
+              navigation: this.props.navigation
+            },'FetchdemoPage')
+          }}
+        />
+        <Button
+          title={'AsyncStoragedemoPage'}
+          onPress={()=>{
+            NavigationUtil.goPage({
+              navigation: this.props.navigation
+            },'AsyncStoragedemoPage')
+          }}
+        />
+        <Button
+          title={'DataStoredemoPage'}
+          onPress={()=>{
+            NavigationUtil.goPage({
+              navigation: this.props.navigation
+            },'DataStoredemoPage')
+          }}
+        />
       </View>
     )
   }

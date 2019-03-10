@@ -18,6 +18,9 @@ import {
 import WelcomePage from '../pages/WelcomePage';
 import HomePage from '../pages/HomePage';
 import DetailPage from '../pages/DetailPage';
+import FetchdemoPage from '../pages/FetchdemoPage';
+import AsyncStoragedemoPage from '../pages/AsyncStoragedemoPage';
+import DataStoredemoPage from '../pages/DataStoredemoPage';
 
 import PopPage from '../pages/PopPage';
 import FavoriterPage from '../pages/FavoriterPage';
@@ -76,6 +79,24 @@ const MainNavigator = createStackNavigator({
   },
   DetailPage:{
     screen: DetailPage,
+    navigationOptions:{
+      // header:null// 设置headernull  禁用头部
+    }
+  },
+  FetchdemoPage:{
+    screen: FetchdemoPage,
+    navigationOptions:{
+      // header:null// 设置headernull  禁用头部
+    }
+  },
+  AsyncStoragedemoPage:{
+    screen: AsyncStoragedemoPage,
+    navigationOptions:{
+      // header:null// 设置headernull  禁用头部
+    }
+  },
+  DataStoredemoPage:{
+    screen: DataStoredemoPage,
     navigationOptions:{
       // header:null// 设置headernull  禁用头部
     }
