@@ -1,7 +1,8 @@
 import {onThemeChange} from './theme';
-import {onLoadPopData} from './pop';
+import {onLoadPopData,onLoadMorePop} from './pop';
 
 export default {
   onThemeChange,
-  onLoadPopData
+  onLoadPopData,
+  onLoadMorePop
 }
