@@ -1,8 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, FlatList, RefreshControl} from 'react-native';
-import {connect} from 'react-redux';
-import actions from '../action/index';
-
+import {StyleSheet, Text, View, Button} from 'react-native';
 
 // 导入 react-navigarion
 import {createMaterialTopTabNavigator,createAppContainer} from 'react-navigation';
@@ -11,59 +8,42 @@ import {createMaterialTopTabNavigator,createAppContainer} from 'react-navigation
 
 import NavigationUtil from '../navigator/NavigationUtil';
 
-const URL = `https://api.github.com/search/repositories?q=`
-const QUERY_STR = '&sort=stars'
-const THEME_COLOR = 'red'
-
 // 创建 createMaterialTopTabNavigator 需要的的路由组件
 class PopTab extends Component {
-  constructor(props){
-    super(props)
-    const {tabLabel} = this.props
-    this.storeName = tabLabel
-  }
-  componentDidMount(){
-    this.loadData();
-  }
-  loadData(){
-    const {onLoadPopData} = this.props;
-    const url = this.getFetchUrl(this.storeName)
-    onLoadPopData(this.storeName,url)
-  }
-  getFetchUrl(key){
-    return URL + key + QUERY_STR
-  }
-  renderItem(data){
-    const item = data.item
-    return <View style={{marginTop:10}}>
-      <Text style={{backgroundColor:'#faa'}}>{JSON.stringify(item)}</Text>
-    </View>
-  }
   render(){
-    const {popular} = this.props
-    let store = popular[this.storeName] // 动态回去state
-    if(!store){
-      store = {
-        items:[],
-        isLoading: false
-      }
-    }
+    const {tabLabel} = this.props
     return(
       <View style={styles.container}>
-        <FlatList
-          data={store.items}
-          renderItem={data=> this.renderItem(data)}
-          keyExtractor={item=>""+item.id}
-          refreshControl={
-            <RefreshControl
-              title={'Loading'}
-              titleColor={THEME_COLOR}
-              colors={THEME_COLOR}
-              refreshing={store.isLoading}
-              onRefresh={()=>this.loadData()}
-              tintColor={THEME_COLOR}
-            />
-          }
+        <Text style={styles.welcome}>PopPage</Text>
+        <Text style={styles.welcome}>{tabLabel}</Text>
+        <Text onPress={()=>{
+          NavigationUtil.goPage({
+            navigation: this.props.navigation
+          },'DetailPage')
+        }}>跳转到详情页面</Text>
+        <Button
+          title={'fetchdemo'}
+          onPress={()=>{
+            NavigationUtil.goPage({
+              navigation: this.props.navigation
+            },'FetchdemoPage')
+          }}
+        />
+        <Button
+          title={'AsyncStoragedemoPage'}
+          onPress={()=>{
+            NavigationUtil.goPage({
+              navigation: this.props.navigation
+            },'AsyncStoragedemoPage')
+          }}
+        />
+        <Button
+          title={'DataStoredemoPage'}
+          onPress={()=>{
+            NavigationUtil.goPage({
+              navigation: this.props.navigation
+            },'DataStoredemoPage')
+          }}
         />
       </View>
     )
@@ -97,7 +77,7 @@ export default class PopPage extends Component {
     const tabs = {}
     this.tabsName.forEach((item,index) => {
       tabs[`tab${index}`] = {
-        screen: props => <PopTabPage {...props} tabLabel={item}/>, // 这是个不错的技巧
+        screen: props => <PopTab {...props} tabLabel={item}/>, // 这是个不错的技巧
         navigationOptions:{
           title:item
         }
@@ -126,15 +106,7 @@ export default class PopPage extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  popular: state.popular
-})
 
-const mapDispatchToProps = (dispatch) => ({
-  onLoadPopData: (storeName, url) => dispatch(actions.onLoadPopData(storeName, url))
-})
-
-const PopTabPage = connect(mapStateToProps,mapDispatchToProps)(PopTab)
 
 const styles = StyleSheet.create({
   container: {

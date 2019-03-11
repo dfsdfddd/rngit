@@ -1,5 +1,5 @@
 import {applyMiddleware, createStore} from 'redux';
-// import thunk from 'redux-thunk';
+import thunk from 'redux-thunk';
 import reducers from '../reducer';
 import {middleware} from '../navigator/AppNavigator';
 
@@ -16,7 +16,8 @@ const logger=store=>next=>action=>{
 
 const middlewares = [
   middleware,
-  logger
+  logger,
+  thunk
 ]
 
 /**
