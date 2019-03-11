@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, View, FlatList, RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
 import actions from '../action/index';
-
+import PopularItem from '../common/PopularItem';
 
 // 导入 react-navigarion
 import {createMaterialTopTabNavigator,createAppContainer} from 'react-navigation';
@@ -35,9 +35,12 @@ class PopTab extends Component {
   }
   renderItem(data){
     const item = data.item
-    return <View style={{marginTop:10}}>
-      <Text style={{backgroundColor:'#faa'}}>{JSON.stringify(item)}</Text>
-    </View>
+    return <PopularItem
+      item={item}
+      onSelect={()=>{
+
+      }}
+    />
   }
   render(){
     const {popular} = this.props
