@@ -9,12 +9,14 @@ import Toast from 'react-native-easy-toast'
 import {createMaterialTopTabNavigator,createAppContainer} from 'react-navigation';
 
 // 导入工具类
-
 import NavigationUtil from '../navigator/NavigationUtil';
+
+// 导入组件
+import NavigationBar from '../common/NavigationBar';
 
 const URL = `https://api.github.com/search/repositories?q=`
 const QUERY_STR = '&sort=stars'
-const THEME_COLOR = 'red'
+const THEME_COLOR = '#678'
 const pageSize = 10
 
 // 创建 createMaterialTopTabNavigator 需要的的路由组件
@@ -28,7 +30,7 @@ class PopTab extends Component {
     this.loadData();
   }
   loadData(loadMore){
-    const {onLoadPopData,onLoadMorePop} = this.props;
+    const {onLoadPopData,onLoadMorePop}= this.props;
     const store = this._store()
     const url = this.getFetchUrl(this.storeName)
     if(loadMore){
@@ -151,6 +153,15 @@ export default class PopPage extends Component {
     return tabs
   }
   render() {
+    let statusBar = {
+      backgroundColor:THEME_COLOR,
+      barStyle:'light-content'
+    }
+    let navigationBar = <NavigationBar
+      title={'最热'}
+      statusBar={statusBar}
+      style={{backgroundColor:THEME_COLOR}}
+    />;
     // 使用路由，并且传递navigation 到新创建的路由
     const TopTabNav = createAppContainer(createMaterialTopTabNavigator(this._genTab(),{
       tabBarOptions:{
@@ -166,6 +177,7 @@ export default class PopPage extends Component {
     }))
     return  <View style={{flex:1,marginTop:30}}>
       {/* <TopTabNavigator navigation={this.props.navigation}/> */}
+      {navigationBar}
       <TopTabNav/>
     </View>
   }
