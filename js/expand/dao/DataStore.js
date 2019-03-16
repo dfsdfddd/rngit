@@ -53,16 +53,17 @@ export default class DataStore {
         });
       })
     } else {
-      new Trending().fetchTrending(url).then((items) => {
-        console.log(items);
-        if(!items){
-          throw new Error('response is not ok')
-        }
-        this.saveData(url,items)
-        resolve(items)
-      }).catch((err) => {
-        reject(err)
-      });
+        new Trending().fetchTrending(url).then((items) => {
+          console.log(items);
+          if(!items){
+            throw new Error('response is not ok')
+          }
+          this.saveData(url,items)
+          resolve(items)
+        }).catch((err) => {
+          reject(err)
+        });
+      
     }
     
   }
