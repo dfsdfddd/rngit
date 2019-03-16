@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, ActivityIndicator, View, FlatList, RefreshControl, Text} from 'react-native';
+import {StyleSheet, ActivityIndicator, View, FlatList, RefreshControl, Text, DeviceInfo} from 'react-native';
 import {connect} from 'react-redux';
 import actions from '../action/index';
 import TrendingItem from '../common/TrendingItem';
@@ -89,7 +89,7 @@ class TreadingTab extends Component {
             <RefreshControl
               title={'Loading'}
               titleColor={THEME_COLOR}
-              colors={THEME_COLOR}
+              colors={[THEME_COLOR]}
               refreshing={store.isLoading}
               onRefresh={()=>this.loadData()}
               tintColor={THEME_COLOR}
@@ -155,13 +155,14 @@ export default class TrendingPage extends Component {
         upperCaseLabel: false,
         scrollEnabled: true,
         style: {
-          backgroundColor: '#678'
+          backgroundColor: '#678',
+          height:30
         },
         indicatorStyle:styles.indicatorStyle,
         labelStyle: styles.labelStyle
       }
     }))
-    return  <View style={{flex:1,marginTop:30}}>
+    return  <View style={{flex:1,marginTop:DeviceInfo.isIPhoneX_deprecated?30:0}}>
       {/* <TopTabNavigator navigation={this.props.navigation}/> */}
       {navigationBar}
       <TopTabNav/>
@@ -193,7 +194,8 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   tabStyle:{
-    minWidth:50
+    padding:0
+    // minWidth:50
   },
   indicatorStyle:{
     height:2,
@@ -201,8 +203,9 @@ const styles = StyleSheet.create({
   },
   labelStyle:{
     fontSize:13,
-    marginTop:6,
-    marginBottom:6
+    margin:0
+    // marginTop:6,
+    // marginBottom:6
   },
   indicatorContainer:{
     alignItems:'center'
