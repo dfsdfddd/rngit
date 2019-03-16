@@ -6,16 +6,16 @@ import {handleData} from '../ActionUtil';
  * dispatch 为异步actioin 需要导入 redux-thunk 包才有效
  * @param storeName 获取某个tab的信息
  */
-export function onLoadPopData(storeName,url,pageSize) {
+export function onLoadTreadingData(storeName,url,pageSize) {
   return dispatch => {
-    dispatch({type: Types.POP_REFRESH, storeName: storeName})
+    dispatch({type: Types.TREADING_REFRESH, storeName: storeName})
     let dataStore = new DataStore()
-    dataStore.fetchData(url,FLAG_STORAGE.flag_popular).then((result) => { // 异步操作
-      handleData(Types.POP_REFRESH_SUCCESS,dispatch, storeName, result, pageSize)
+    dataStore.fetchData(url,FLAG_STORAGE.flag_trending).then((result) => { // 异步操作
+      handleData(Types.TREADING_REFRESH_SUCCESS,dispatch, storeName, result, pageSize)
     }).catch((err) => {
       console.log(err)
       dispatch({
-        type: Types.POP_REFRESH_FAIL, 
+        type: Types.TREADING_REFRESH_FAIL, 
         storeName,
         error: err
       })
@@ -31,7 +31,7 @@ export function onLoadPopData(storeName,url,pageSize) {
  * @param {*} dataArray 原始数据
  * @param {*} callBack 返回异常信息和没有更多等
  */
-export function onLoadMorePop(storeName,pageIndex,pageSize,dataArray=[],callBack){
+export function onLoadMoreTreading(storeName,pageIndex,pageSize,dataArray=[],callBack){
   return dispatch => {
     setTimeout(() => { // 模拟请求
       console.log('add end')
@@ -40,7 +40,7 @@ export function onLoadMorePop(storeName,pageIndex,pageSize,dataArray=[],callBack
           callBack('no more')
         }
         dispatch({
-          type: Types.POP_LOAD_MORE_FAIL,
+          type: Types.TREADING_LOAD_MORE_FAIL,
           error:'no more',
           storeName: storeName,
           pageIndex:--pageIndex,
@@ -51,7 +51,7 @@ export function onLoadMorePop(storeName,pageIndex,pageSize,dataArray=[],callBack
         // 本次和载入的最大数量
         let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageSize*pageIndex
         dispatch({
-          type: Types.POP_LOAD_MORE_SUCCESS,
+          type: Types.TREADING_LOAD_MORE_SUCCESS,
           storeName,
           pageIndex,
           projectModes: dataArray.slice(0,max)

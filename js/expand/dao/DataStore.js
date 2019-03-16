@@ -1,5 +1,10 @@
 import { AsyncStorage } from "react-native";
+import Trending from 'GitHubTrending';
 
+export  const FLAG_STORAGE = {
+  flag_popular: 'popular',
+  flag_trending: 'trending'
+}
 export default class DataStore {
   // 保存数据
   saveData(url, data, callback){
@@ -31,25 +36,38 @@ export default class DataStore {
     })
   }
   // 获取网络数据
-  fetchNetData(url){
-    return new Promise((resolve,reject)=>{
-      fetch(url).then((response) => {
-        if(response.ok){
-          return response.json()
+  fetchNetData(url,flag){
+    if(flag !== FLAG_STORAGE.flag_trending){
+      return new Promise((resolve,reject)=>{
+        fetch(url).then((response) => {
+          if(response.ok){
+            return response.json()
+          }
+          throw new Errow('network is not ok')
+        }).then((responseData)=>{
+          console.log(responseData);
+          this.saveData(url,responseData)
+          resolve(responseData)
+        }).catch((err) => {
+          reject(err)
+        });
+      })
+    } else {
+      new Trending().fetchTrending(url).then((items) => {
+        console.log(items);
+        if(!items){
+          throw new Error('response is not ok')
         }
-        throw new Errow('network is not ok')
-      }).then((responseData)=>{
-        console.log(responseData);
-        this.saveData(url,responseData)
-        resolve(responseData)
+        this.saveData(url,items)
+        resolve(items)
       }).catch((err) => {
         reject(err)
       });
-    })
+    }
+    
   }
   // 实现缓存策略的入口方法
-  fetchData(url){
-    console.log(url);
+  fetchData(url,flag){
     return new Promise((resolve, reject)=>{
       this.fetchLocalData(url).then((wrapData) => {
         console.log('inlocal');
@@ -58,7 +76,7 @@ export default class DataStore {
           resolve(wrapData)
         } else {
           console.log('local has no data. go fetch');
-          this.fetchNetData(url).then((data) => {
+          this.fetchNetData(url,flag).then((data) => {
             resolve(this._wrapData(data))
           }).catch((err) => {
             reject(err)
@@ -66,7 +84,7 @@ export default class DataStore {
         }
       }).catch((err) => {
         console.log('in err fetch');
-        this.fetchNetData(url).then((data) => {
+        this.fetchNetData(url,flag).then((data) => {
           resolve(this._wrapData(data))
         }).catch((err) => {
           reject(err)
