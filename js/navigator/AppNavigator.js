@@ -80,7 +80,7 @@ const MainNavigator = createStackNavigator({
   DetailPage:{
     screen: DetailPage,
     navigationOptions:{
-      // header:null// 设置headernull  禁用头部
+      header:null// 设置headernull  禁用头部
     }
   },
   FetchdemoPage:{

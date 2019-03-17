@@ -37,35 +37,34 @@ export default class DataStore {
   }
   // 获取网络数据
   fetchNetData(url,flag){
-    if(flag !== FLAG_STORAGE.flag_trending){
-      return new Promise((resolve,reject)=>{
-        fetch(url).then((response) => {
-          if(response.ok){
-            return response.json()
-          }
-          throw new Errow('network is not ok')
-        }).then((responseData)=>{
-          console.log(responseData);
-          this.saveData(url,responseData)
-          resolve(responseData)
-        }).catch((err) => {
-          reject(err)
-        });
-      })
-    } else {
-        new Trending().fetchTrending(url).then((items) => {
-          console.log(items);
-          if(!items){
-            throw new Error('response is not ok')
-          }
-          this.saveData(url,items)
-          resolve(items)
-        }).catch((err) => {
-          reject(err)
-        });
-      
-    }
-    
+    return new Promise((resolve,reject)=>{
+      if(flag !== FLAG_STORAGE.flag_trending){
+          fetch(url).then((response) => {
+            if(response.ok){
+              return response.json()
+            }
+            throw new Errow('network is not ok')
+          }).then((responseData)=>{
+            console.log(responseData);
+            this.saveData(url,responseData)
+            resolve(responseData)
+          }).catch((err) => {
+            reject(err)
+          });
+      } else {
+          new Trending().fetchTrending(url).then((items) => {
+            console.log(items);
+            if(!items){
+              throw new Error('response is not ok')
+            }
+            this.saveData(url,items)
+            resolve(items)
+          }).catch((err) => {
+            reject(err)
+          });
+        
+      }
+    })
   }
   // 实现缓存策略的入口方法
   fetchData(url,flag){
