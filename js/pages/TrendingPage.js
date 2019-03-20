@@ -16,11 +16,17 @@ import NavigationUtil from '../navigator/NavigationUtil';
 // 导入组件
 import NavigationBar from '../common/NavigationBar';
 import TrendingDialog, { TimeSpans } from '../common/TrendingDialog';
+import FavoriteDao from '../expand/dao/FavoriteDao';
+import { FLAG_STORAGE } from '../expand/dao/DataStore';
+import FavoriteUtil from '../util/FavoriteUtil';
+
 
 const EVENT_TYPE_TIME_SPAN_CHANGE = 'EVENT_TYPE_TIME_SPAN_CHANGE'
 const URL = `https://github.com/trending/`
 const THEME_COLOR = '#678'
 const pageSize = 10
+const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_trending)
+
 
 // 创建 createMaterialTopTabNavigator 需要的的路由组件
 class TreadingTab extends Component {
@@ -48,11 +54,11 @@ class TreadingTab extends Component {
     const store = this._store()
     const url = this.getFetchUrl(this.storeName)
     if(loadMore){
-      onLoadMoreTreading(this.storeName,++store.pageIndex,pageSize, store.items, callBack=>{
+      onLoadMoreTreading(this.storeName,++store.pageIndex,pageSize, store.items,favoriteDao, callBack=>{
         this.refs.toast.show('没有更多了')
       })
     } else {
-      onLoadTreadingData(this.storeName,url,pageSize)
+      onLoadTreadingData(this.storeName,url,pageSize,favoriteDao)
     }
   }
   // 获取当前页面有关的数据
@@ -75,10 +81,16 @@ class TreadingTab extends Component {
   renderItem(data){
     const item = data.item
     return <TrendingItem
-      item={item}
-      onSelect={()=>{
-        NavigationUtil.goPage({projectModes:item},'DetailPage')
+      projectModes={item}
+      onSelect={(callback)=>{
+        NavigationUtil.goPage({
+          projectModes:item,
+          flag:FLAG_STORAGE.flag_trending,
+          callback
+        },'DetailPage')
       }}
+      onFavorite={(item, isFavorite)=> FavoriteUtil.onFavorite(favoriteDao,item,isFavorite,FLAG_STORAGE.flag_trending)}
+
     />
   }
   genIndicator(){
@@ -97,7 +109,7 @@ class TreadingTab extends Component {
         <FlatList
           data={store.projectModes}
           renderItem={data=> this.renderItem(data)}
-          keyExtractor={item=>""+(item.id || item.fullName)}
+          keyExtractor={item=>""+(item.item.id || item.item.fullName)}
           refreshControl={
             <RefreshControl
               title={'Loading'}
@@ -231,8 +243,8 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  onLoadTreadingData: (storeName, url, pageSize) => dispatch(actions.onLoadTreadingData(storeName, url, pageSize)),
-  onLoadMoreTreading: (storeName,pageIndex,pageSize,items,callBack) => dispatch(actions.onLoadMoreTreading(storeName,pageIndex,pageSize,items,callBack))
+  onLoadTreadingData: (storeName, url, pageSize,favoriteDao) => dispatch(actions.onLoadTreadingData(storeName, url, pageSize,favoriteDao)),
+  onLoadMoreTreading: (storeName,pageIndex,pageSize,items,favoriteDao,callBack) => dispatch(actions.onLoadMoreTreading(storeName,pageIndex,pageSize,items,favoriteDao,callBack))
 })
 
 const TreadingTabPage = connect(mapStateToProps,mapDispatchToProps)(TreadingTab)

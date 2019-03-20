@@ -1,17 +1,17 @@
 import Types from "../types";
 import DataStore, { FLAG_STORAGE } from '../../expand/dao/DataStore';
-import {handleData} from '../ActionUtil';
+import {handleData, _projectModels} from '../ActionUtil';
 
 /**
  * dispatch 为异步actioin 需要导入 redux-thunk 包才有效
  * @param storeName 获取某个tab的信息
  */
-export function onLoadTreadingData(storeName,url,pageSize) {
+export function onLoadTreadingData(storeName,url,pageSize,favoriteDao) {
   return dispatch => {
     dispatch({type: Types.TREADING_REFRESH, storeName: storeName})
     let dataStore = new DataStore()
     dataStore.fetchData(url,FLAG_STORAGE.flag_trending).then((result) => { // 异步操作
-      handleData(Types.TREADING_REFRESH_SUCCESS,dispatch, storeName, result, pageSize)
+      handleData(Types.TREADING_REFRESH_SUCCESS,dispatch, storeName, result, pageSize,favoriteDao)
     }).catch((err) => {
       console.log(err)
       dispatch({
@@ -31,7 +31,7 @@ export function onLoadTreadingData(storeName,url,pageSize) {
  * @param {*} dataArray 原始数据
  * @param {*} callBack 返回异常信息和没有更多等
  */
-export function onLoadMoreTreading(storeName,pageIndex,pageSize,dataArray=[],callBack){
+export function onLoadMoreTreading(storeName,pageIndex,pageSize,dataArray=[],favoriteDao,callBack){
   return dispatch => {
     setTimeout(() => { // 模拟请求
       console.log('add end')
@@ -50,12 +50,15 @@ export function onLoadMoreTreading(storeName,pageIndex,pageSize,dataArray=[],cal
         console.log('add normal')
         // 本次和载入的最大数量
         let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageSize*pageIndex
-        dispatch({
-          type: Types.TREADING_LOAD_MORE_SUCCESS,
-          storeName,
-          pageIndex,
-          projectModes: dataArray.slice(0,max)
+        _projectModels(dataArray.slice(0,max),favoriteDao,data=>{
+          dispatch({
+            type: Types.TREADING_LOAD_MORE_SUCCESS,
+            storeName,
+            pageIndex,
+            projectModes: data
+          })
         })
+        
       }
     }, 500);
   }

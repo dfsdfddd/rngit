@@ -2,39 +2,22 @@ import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import HTMLView from 'react-native-htmlview'; // reactnative 中显示
+import BaseItem from './BaseItem';
 
-export default class TrendingItem extends Component {
+export default class TrendingItem extends BaseItem {
   constructor(props) {
     super(props);
     this.state = {
     };
   }
-  sf(){
-    array.forEach(currentItem => {
-      
-    })
-    
-  }
   render() {
-    const {item} = this.props
+    const {projectModes} = this.props
+    const {item} =projectModes
     if(!item) return null
-    // console.log(item);
-    let favoriteButton = 
-    <TouchableOpacity
-      style={{padding:6}}
-      onPress={()=>{}}
-      underlayColor={'transparent'}
-    >
-      <FontAwesome
-        name={'star-o'}
-        size={26}
-        style={{color:'red'}}
-      />
-    </TouchableOpacity>
     let description ='<p>'+ item.description +'</p>'
     return (
       <TouchableOpacity
-        onPress={this.props.onSelect}
+        onPress={()=>{this.onItemClick()}}
       >
         <View style={styles.cell_container}>
           <Text style={styles.title}>
@@ -71,7 +54,7 @@ export default class TrendingItem extends Component {
               <Text>Start:</Text>
               <Text>{item.starCount}</Text>
             </View>
-            {favoriteButton}
+            {this._favoriteIcon()}
           </View>
         </View>
       </TouchableOpacity>

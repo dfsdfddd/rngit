@@ -5,6 +5,7 @@ import actions from '../action/index';
 import PopularItem from '../common/PopularItem';
 import Toast from 'react-native-easy-toast'
 
+
 // 导入 react-navigarion
 import {createMaterialTopTabNavigator,createAppContainer} from 'react-navigation';
 
@@ -13,11 +14,16 @@ import NavigationUtil from '../navigator/NavigationUtil';
 
 // 导入组件
 import NavigationBar from '../common/NavigationBar';
+import FavoriteDao from '../expand/dao/FavoriteDao';
+import { FLAG_STORAGE } from '../expand/dao/DataStore';
+import FavoriteUtil from '../util/FavoriteUtil';
 
 const URL = `https://api.github.com/search/repositories?q=`
 const QUERY_STR = '&sort=stars'
 const THEME_COLOR = '#678'
 const pageSize = 10
+const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular)
+
 
 // 创建 createMaterialTopTabNavigator 需要的的路由组件
 class PopTab extends Component {
@@ -34,11 +40,11 @@ class PopTab extends Component {
     const store = this._store()
     const url = this.getFetchUrl(this.storeName)
     if(loadMore){
-      onLoadMorePop(this.storeName,++store.pageIndex,pageSize, store.items, callBack=>{
+      onLoadMorePop(this.storeName,++store.pageIndex,pageSize, store.items,favoriteDao, callBack=>{
         this.refs.toast.show('没有更多了')
       })
     } else {
-      onLoadPopData(this.storeName,url,pageSize)
+      onLoadPopData(this.storeName,url,pageSize,favoriteDao)
     }
   }
   // 获取当前页面有关的数据
@@ -61,10 +67,15 @@ class PopTab extends Component {
   renderItem(data){
     const item = data.item
     return <PopularItem
-      item={item}
-      onSelect={()=>{
-        NavigationUtil.goPage({projectModes:item},'DetailPage')
+      projectModes={item}
+      onSelect={(callback)=>{
+        NavigationUtil.goPage({
+          projectModes:item,
+          flag:FLAG_STORAGE.flag_popular,
+          callback
+        },'DetailPage')
       }}
+      onFavorite={(item,isFavorite)=>FavoriteUtil.onFavorite(favoriteDao,item,isFavorite,FLAG_STORAGE.flag_popular)}
     />
   }
   genIndicator(){
@@ -83,7 +94,7 @@ class PopTab extends Component {
         <FlatList
           data={store.projectModes}
           renderItem={data=> this.renderItem(data)}
-          keyExtractor={item=>""+item.id}
+          keyExtractor={item=>""+item.item.id}
           refreshControl={
             <RefreshControl
               title={'Loading'}
@@ -189,8 +200,8 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  onLoadPopData: (storeName, url, pageSize) => dispatch(actions.onLoadPopData(storeName, url, pageSize)),
-  onLoadMorePop: (storeName,pageIndex,pageSize,items,callBack) => dispatch(actions.onLoadMorePop(storeName,pageIndex,pageSize,items,callBack))
+  onLoadPopData: (storeName, url, pageSize,favoriteDao) => dispatch(actions.onLoadPopData(storeName, url, pageSize,favoriteDao)),
+  onLoadMorePop: (storeName,pageIndex,pageSize,items,favoriteDao,callBack) => dispatch(actions.onLoadMorePop(storeName,pageIndex,pageSize,items,favoriteDao,callBack))
 })
 
 const PopTabPage = connect(mapStateToProps,mapDispatchToProps)(PopTab)
