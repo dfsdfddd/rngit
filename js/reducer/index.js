@@ -2,6 +2,7 @@ import {combineReducers} from 'redux';
 import theme from './theme';
 import popular from './pop';
 import treading from './treading';
+import favorite from './favorite';
 import {rootCom, RootNavigator} from '../navigator/AppNavigator';
 
 
@@ -33,7 +34,8 @@ const navReducer = (state = navState, action) => {
    nav: navReducer,
    theme:theme,
    popular:popular,
-   treading:treading
+   treading:treading,
+   favorite:favorite
  })
 
  export default index

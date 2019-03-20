@@ -24,25 +24,41 @@ const THEME_COLOR = '#678'
 const pageSize = 10
 const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular)
 
-
+import EventTypes from '../util/EventTypes';
+import EventBus from 'react-native-event-bus'
 // 创建 createMaterialTopTabNavigator 需要的的路由组件
 class PopTab extends Component {
   constructor(props){
     super(props)
     const {tabLabel} = this.props
     this.storeName = tabLabel
+    this.isFavoriteChanged = false
   }
   componentDidMount(){
     this.loadData();
+    EventBus.getInstance().addListener(EventTypes.favorite_changed_popular, this.favoriteChangeListener = () => {
+      this.isFavoriteChanged = true
+    })
+    EventBus.getInstance().addListener(EventTypes.bottom_tab_select, this.bottomTabSelectListener = data => {
+      if(data.to === 0 && this.isFavoriteChanged){
+        this.loadData(null,true)
+      }
+    })
   }
-  loadData(loadMore){
-    const {onLoadPopData,onLoadMorePop}= this.props;
+  componentWillUnmount(){
+    EventBus.getInstance().removeListener(this.favoriteChangeListener)
+    EventBus.getInstance().removeListener(this.bottomTabSelectListener)
+  }
+  loadData(loadMore,refreshFavorite){
+    const {onLoadPopData,onLoadMorePop,onFlushPopularFavorite}= this.props;
     const store = this._store()
     const url = this.getFetchUrl(this.storeName)
     if(loadMore){
       onLoadMorePop(this.storeName,++store.pageIndex,pageSize, store.items,favoriteDao, callBack=>{
         this.refs.toast.show('没有更多了')
       })
+    } else if(refreshFavorite){
+      onFlushPopularFavorite(this.storeName, store.pageIndex, pageSize,store.items, favoriteDao)
     } else {
       onLoadPopData(this.storeName,url,pageSize,favoriteDao)
     }
@@ -201,7 +217,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onLoadPopData: (storeName, url, pageSize,favoriteDao) => dispatch(actions.onLoadPopData(storeName, url, pageSize,favoriteDao)),
-  onLoadMorePop: (storeName,pageIndex,pageSize,items,favoriteDao,callBack) => dispatch(actions.onLoadMorePop(storeName,pageIndex,pageSize,items,favoriteDao,callBack))
+  onLoadMorePop: (storeName,pageIndex,pageSize,items,favoriteDao,callBack) => dispatch(actions.onLoadMorePop(storeName,pageIndex,pageSize,items,favoriteDao,callBack)),
+  onFlushPopularFavorite: (storeName,pageIndex,pageSize,items,favoriteDao) => dispatch(actions.onFlushPopularFavorite(storeName,pageIndex,pageSize,items,favoriteDao))
 })
 
 const PopTabPage = connect(mapStateToProps,mapDispatchToProps)(PopTab)

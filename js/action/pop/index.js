@@ -61,3 +61,17 @@ export function onLoadMorePop(storeName,pageIndex,pageSize,dataArray=[],favorite
     }, 500);
   }
 }
+
+export function onFlushPopularFavorite(storeName, pageIndex, pageSize, dataArray=[], favoriteDao) {
+  return dispatch => {
+    let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageSize*pageIndex
+        _projectModels(dataArray.slice(0,max),favoriteDao,data=>{
+          dispatch({
+            type: Types.FLUSH_POP_FAVORITE,
+            storeName,
+            pageIndex,
+            projectModes: data
+          })
+        })
+  }
+}

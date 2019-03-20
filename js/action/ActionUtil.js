@@ -37,13 +37,11 @@ export async function _projectModels(showItems,favoriteDao,callback){
   } catch (error) {
     console.log(error)
   }
-  console.log(keys)
   let projectModels = []
   for(let i = 0, len = showItems.length; i<len;i++){
     //Utils.checkFavorite 检查item.id=key 是否在于keys 都列表里，存在就表示收藏了
     projectModels.push(new ProjectModel(showItems[i], Utils.checkFavorite(showItems[i], keys)));
   }
-  console.log(projectModels)
   if(typeof callback === 'function'){
     callback(projectModels)
   }

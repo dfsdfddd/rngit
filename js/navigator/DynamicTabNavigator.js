@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {DeviceInfo} from 'react-native';
+import EventBus from 'react-native-event-bus'
+import EventTypes from '../util/EventTypes';
 
 import {connect} from 'react-redux';
 
@@ -199,7 +201,14 @@ class DynamicTabNavigator extends Component {
      * 第二种
      */
     const Tabss = this._tabNavigator()
-    return <Tabss/>
+    return <Tabss
+      onNavigationStateChange={(prevState,newState,action)=>{
+        EventBus.getInstance().fireEvent(EventTypes.bottom_tab_select, {
+            from: prevState.index,
+            to:newState.index
+        })
+      }}
+    />
   }
 }
 
