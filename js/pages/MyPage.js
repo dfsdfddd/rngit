@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Button, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, Button, TouchableOpacity, ScrollView} from 'react-native';
 import NavigationUtil from '../navigator/NavigationUtil';
 
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import NavigationBar from '../common/NavigationBar';
+import {MORE_MENU} from '../common/MoreMenu';
+import GlobalStyles from '../res/GlobalStyles';
+import ViewUtil from '../util/ViewUtil';
 
 const THEME_COLOR = '#678'
 
@@ -37,6 +40,24 @@ export default class MyPage extends Component {
       />
     </TouchableOpacity>
   }
+  getItem(menu){
+    return ViewUtil.getMenuItem(()=>{this.onClick(menu)},menu,THEME_COLOR)
+  }
+  onClick(menu){
+    let RouteName,params={};
+    switch (menu) {
+      case MORE_MENU.Tutorial:
+        RouteName = 'WebViewPage';
+        params.title= '教程';
+        params.url = 'https://www.baidu.com/'
+        // params.url = 'https://coding.m.imooc.com/classindex.html?cid=89'
+        // params.url = 'http://58.250.168.182:48004/trust/openAcc'
+        break;
+    }
+    if(RouteName){
+      NavigationUtil.goPage(params,RouteName)
+    }
+  }
   render() {
     let statusBar = {
       backgroundColor:THEME_COLOR,
@@ -50,38 +71,54 @@ export default class MyPage extends Component {
       leftButton={this.getLeftButton()}
     />;
     return (
-      <View style={styles.container}>
+      <View style={GlobalStyles.root_container}>
         {navigationBar}
-        <Text style={styles.welcome}>MyPage</Text>
-        <Text onPress={()=>{
-          NavigationUtil.goPage({
-            navigation: this.props.navigation
-          },'DetailPage')
-        }}>跳转到详情页面</Text>
-        <Button
-          title={'fetchdemo'}
-          onPress={()=>{
-            NavigationUtil.goPage({
-              navigation: this.props.navigation
-            },'FetchdemoPage')
-          }}
-        />
-        <Button
-          title={'AsyncStoragedemoPage'}
-          onPress={()=>{
-            NavigationUtil.goPage({
-              navigation: this.props.navigation
-            },'AsyncStoragedemoPage')
-          }}
-        />
-        <Button
-          title={'DataStoredemoPage'}
-          onPress={()=>{
-            NavigationUtil.goPage({
-              navigation: this.props.navigation
-            },'DataStoredemoPage')
-          }}
-        />
+        <ScrollView
+
+        >
+          <TouchableOpacity
+            style={styles.item}
+            onPress={()=>{
+              this.onClick(MORE_MENU.About)
+            }}
+          >
+            <View style={styles.about_left}>
+              <Ionicons
+                style={{marginRight: 10,color: THEME_COLOR}}
+                name={MORE_MENU.About.icon}
+                size={40}
+              />
+              <Text>Github Popular</Text>
+            </View>
+            <Ionicons
+                style={{marginRight: 10,color: THEME_COLOR, alignSelf: 'center',}}
+                name={'ios-arrow-forward'}
+                size={16}
+              />
+          </TouchableOpacity>  
+          <View style={GlobalStyles.line}/>
+          {this.getItem(MORE_MENU.Tutorial)}
+          <Text style={styles.groupTitle}>趋势管理</Text>
+          {this.getItem(MORE_MENU.Custom_Language)}
+          <View style={GlobalStyles.line}/>
+          {this.getItem(MORE_MENU.Sort_Language)}
+
+          <Text style={styles.groupTitle}>最热管理</Text>
+          {this.getItem(MORE_MENU.Custom_Key)}
+          <View style={GlobalStyles.line}/>
+          {this.getItem(MORE_MENU.Sort_Key)}
+          <View style={GlobalStyles.line}/>
+          {this.getItem(MORE_MENU.Remove_Key)}
+
+          <Text style={styles.groupTitle}>设置</Text>
+          {this.getItem(MORE_MENU.Custom_Theme)}
+          <View style={GlobalStyles.line}/>
+          {this.getItem(MORE_MENU.About_Author)}
+          <View style={GlobalStyles.line}/>
+          {this.getItem(MORE_MENU.Custom_Theme)}
+          <View style={GlobalStyles.line}/>
+          {this.getItem(MORE_MENU.Feedback)}
+        </ScrollView>
       </View>
     );
   }
@@ -93,11 +130,25 @@ const styles = StyleSheet.create({
     marginTop: 30,
     // justifyContent: 'center',
     // alignItems: 'center',
-    // backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  about_left: {
+    alignItems: 'center',
+    flexDirection:'row'
+  },
+  item:{
+    backgroundColor:'white',
+    padding:10,
+    height:90,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'row'
+  },
+  groupTitle: {
+    marginLeft: 10,
+    marginTop: 10,
+    marginBottom: 5,
+    fontSize: 12,
+    color:'gray'
   }
 });

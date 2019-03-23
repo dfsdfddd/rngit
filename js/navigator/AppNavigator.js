@@ -21,6 +21,7 @@ import DetailPage from '../pages/DetailPage';
 import FetchdemoPage from '../pages/FetchdemoPage';
 import AsyncStoragedemoPage from '../pages/AsyncStoragedemoPage';
 import DataStoredemoPage from '../pages/DataStoredemoPage';
+import WebViewPage from '../pages/WebViewPage';
 
 import PopPage from '../pages/PopPage';
 import FavoriterPage from '../pages/FavoriterPage';
@@ -79,6 +80,12 @@ const MainNavigator = createStackNavigator({
   },
   DetailPage:{
     screen: DetailPage,
+    navigationOptions:{
+      header:null// 设置headernull  禁用头部
+    }
+  },
+  WebViewPage:{
+    screen: WebViewPage,
     navigationOptions:{
       header:null// 设置headernull  禁用头部
     }
