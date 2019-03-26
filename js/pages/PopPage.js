@@ -26,6 +26,7 @@ const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular)
 
 import EventTypes from '../util/EventTypes';
 import EventBus from 'react-native-event-bus'
+import { FLAG_LANGUAGE } from '../expand/dao/LanguageDao';
 // 创建 createMaterialTopTabNavigator 需要的的路由组件
 class PopTab extends Component {
   constructor(props){
@@ -159,57 +160,6 @@ const TopTabNavigator = createMaterialTopTabNavigator({
     }
   },
 })
-// 主体导出组件
-export default class PopPage extends Component {
-  constructor(props){
-    super(props);
-    this.tabsName = ['Java','Android','React','React-native','Php','Vue'];
-  }
-  // static router =  TopTabNavigator.router
-
-  _genTab(){
-    const tabs = {}
-    this.tabsName.forEach((item,index) => {
-      tabs[`tab${index}`] = {
-        screen: props => <PopTabPage {...props} tabLabel={item}/>, // 这是个不错的技巧
-        navigationOptions:{
-          title:item
-        }
-      }
-    });
-    return tabs
-  }
-  render() {
-    let statusBar = {
-      backgroundColor:THEME_COLOR,
-      barStyle:'light-content'
-    }
-    let navigationBar = <NavigationBar
-      title={'最热'}
-      statusBar={statusBar}
-      style={{backgroundColor:THEME_COLOR}}
-    />;
-    // 使用路由，并且传递navigation 到新创建的路由
-    const TopTabNav = createAppContainer(createMaterialTopTabNavigator(this._genTab(),{
-      tabBarOptions:{
-        tabStyle: styles.tabStyle,
-        upperCaseLabel: false,
-        scrollEnabled: true,
-        style: {
-          backgroundColor: '#678',
-          height: 30
-        },
-        indicatorStyle:styles.indicatorStyle,
-        labelStyle: styles.labelStyle
-      }
-    }))
-    return  <View style={{flex:1,marginTop:DeviceInfo.isIPhoneX_deprecated?30:0}}>
-      {/* <TopTabNavigator navigation={this.props.navigation}/> */}
-      {navigationBar}
-      <TopTabNav/>
-    </View>
-  }
-}
 
 const mapStateToProps = (state) => ({
   popular: state.popular
@@ -222,6 +172,75 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const PopTabPage = connect(mapStateToProps,mapDispatchToProps)(PopTab)
+// 主体导出组件
+class PopPage extends Component {
+  constructor(props){
+    super(props);
+    const {onLoadLanguage} = this.props;
+    onLoadLanguage(FLAG_LANGUAGE.flag_key);
+  }
+  // static router =  TopTabNavigator.router
+
+  _genTab(){
+    const tabs = {}
+    const {keys} = this.props;
+    keys.forEach((item,index) => {
+      if(item.checked){
+        tabs[`tab${index}`] = {
+          screen: props => <PopTabPage {...props} tabLabel={item.name}/>, // 这是个不错的技巧
+          navigationOptions:{
+            title:item.name
+          }
+        }
+      }
+      
+    });
+    return tabs
+  }
+  render() {
+    const {keys} = this.props;
+
+    let statusBar = {
+      backgroundColor:THEME_COLOR,
+      barStyle:'light-content'
+    }
+    let navigationBar = <NavigationBar
+      title={'最热'}
+      statusBar={statusBar}
+      style={{backgroundColor:THEME_COLOR}}
+    />;
+    // 使用路由，并且传递navigation 到新创建的路由
+    const TopTabNav =keys.length ? createAppContainer(createMaterialTopTabNavigator(this._genTab(),{
+      tabBarOptions:{
+        tabStyle: styles.tabStyle,
+        upperCaseLabel: false,
+        scrollEnabled: true,
+        style: {
+          backgroundColor: '#678',
+          height: 30
+        },
+        indicatorStyle:styles.indicatorStyle,
+        labelStyle: styles.labelStyle
+      }
+    })) : null
+    return  <View style={{flex:1,marginTop:DeviceInfo.isIPhoneX_deprecated?30:0}}>
+      {/* <TopTabNavigator navigation={this.props.navigation}/> */}
+      {navigationBar}
+      {TopTabNav&&<TopTabNav/>}
+      
+    </View>
+  }
+}
+
+const mapPopStateToProps = (state) => ({
+  keys: state.language.keys,
+})
+
+const mapPopDispatchToProps = (dispatch) => ({
+  onLoadLanguage: (flag) => dispatch(actions.onLoadLanguage(flag)),
+})
+
+export default  connect(mapPopStateToProps,mapPopDispatchToProps)(PopPage)
 
 const styles = StyleSheet.create({
   container: {
