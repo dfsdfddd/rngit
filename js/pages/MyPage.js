@@ -6,7 +6,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import NavigationBar from '../common/NavigationBar';
 import {MORE_MENU} from '../common/MoreMenu';
-import GlobalStyles from '../res/GlobalStyles';
+import GlobalStyles from '../res/styles/GlobalStyles';
 import ViewUtil from '../util/ViewUtil';
 
 const THEME_COLOR = '#678'
@@ -52,6 +52,12 @@ export default class MyPage extends Component {
         params.url = 'https://www.baidu.com/'
         // params.url = 'https://coding.m.imooc.com/classindex.html?cid=89'
         // params.url = 'http://58.250.168.182:48004/trust/openAcc'
+        break;
+      case MORE_MENU.About:
+        RouteName = 'AboutPage';
+        break;
+      case MORE_MENU.About_Author:
+        RouteName = 'AboutMePage'
         break;
     }
     if(RouteName){

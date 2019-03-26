@@ -27,6 +27,8 @@ import PopPage from '../pages/PopPage';
 import FavoriterPage from '../pages/FavoriterPage';
 import TrendingPage from '../pages/TrendingPage';
 import MyPage from '../pages/MyPage';
+import AboutPage from "../pages/about/AboutPage";
+import AboutMePage from "../pages/about/AboutMePage";
 
 
 const BottomNav = createBottomTabNavigator({
@@ -86,6 +88,18 @@ const MainNavigator = createStackNavigator({
   },
   WebViewPage:{
     screen: WebViewPage,
+    navigationOptions:{
+      header:null// 设置headernull  禁用头部
+    }
+  },
+  AboutPage:{
+    screen: AboutPage,
+    navigationOptions:{
+      header:null// 设置headernull  禁用头部
+    }
+  },
+  AboutMePage:{
+    screen: AboutMePage,
     navigationOptions:{
       header:null// 设置headernull  禁用头部
     }
