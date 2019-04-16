@@ -19,6 +19,8 @@ import TrendingDialog, { TimeSpans } from '../common/TrendingDialog';
 import FavoriteDao from '../expand/dao/FavoriteDao';
 import { FLAG_STORAGE } from '../expand/dao/DataStore';
 import FavoriteUtil from '../util/FavoriteUtil';
+import { FLAG_LANGUAGE } from '../expand/dao/LanguageDao';
+import ArrayUtil from '../util/ArrayUtil';
 
 
 const EVENT_TYPE_TIME_SPAN_CHANGE = 'EVENT_TYPE_TIME_SPAN_CHANGE'
@@ -143,24 +145,42 @@ class TreadingTab extends Component {
   }
 };
 
+const mapStateToProps = (state) => ({
+  treading: state.treading
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  onLoadTreadingData: (storeName, url, pageSize,favoriteDao) => dispatch(actions.onLoadTreadingData(storeName, url, pageSize,favoriteDao)),
+  onLoadMoreTreading: (storeName,pageIndex,pageSize,items,favoriteDao,callBack) => dispatch(actions.onLoadMoreTreading(storeName,pageIndex,pageSize,items,favoriteDao,callBack))
+})
+
+const TreadingTabPage = connect(mapStateToProps,mapDispatchToProps)(TreadingTab)
+
 // 主体导出组件
-export default class TrendingPage extends Component {
+class TrendingPage extends Component {
   constructor(props){
     super(props);
-    this.tabsName = ['All','C','C++','Javascript','Php','Angular'];
+    // this.tabsName = ['All','C','C++','Javascript','Php','Angular'];
     this.state={
       timeSpan:TimeSpans[0]
     }
+    const {onLoadLanguage} = this.props
+    onLoadLanguage(FLAG_LANGUAGE.flag_language)
+    this.preKeys = []
   }
   // static router =  TopTabNavigator.router
 
   _genTab(){
     const tabs = {}
-    this.tabsName.forEach((item,index) => {
-      tabs[`tab${index}`] = {
-        screen: props => <TreadingTabPage {...props} timeSpan={this.state.timeSpan} tabLabel={item}/>, // 这是个不错的技巧
-        navigationOptions:{
-          title:item
+    const {keys} = this.props
+    this.preKeys = keys
+    keys.forEach((item,index) => {
+      if(item.checked){
+        tabs[`tab${index}`] = {
+          screen: props => <TreadingTabPage {...props} timeSpan={this.state.timeSpan} tabLabel={item.name}/>, // 这是个不错的技巧
+          navigationOptions:{
+            title:item.name
+          }
         }
       }
     });
@@ -199,7 +219,7 @@ export default class TrendingPage extends Component {
     />
   }
   _tabNav(){
-    if(!this.tabNav){
+    if(!this.tabNav || !ArrayUtil.isEqual(this.preKeys,this.props.keys)){
       this.tabNav = createAppContainer(createMaterialTopTabNavigator(this._genTab(),{
         tabBarOptions:{
           tabStyle: styles.tabStyle,
@@ -217,6 +237,7 @@ export default class TrendingPage extends Component {
     return this.tabNav
   }
   render() {
+    const {keys} = this.props
     let statusBar = {
       backgroundColor:THEME_COLOR,
       barStyle:'light-content'
@@ -228,26 +249,25 @@ export default class TrendingPage extends Component {
       style={{backgroundColor:THEME_COLOR}}
     />;
     // 使用路由，并且传递navigation 到新创建的路由
-    const TopTabNav = this._tabNav()
+    const TopTabNav = keys.length ? this._tabNav() : null
     return  <View style={{flex:1,marginTop:DeviceInfo.isIPhoneX_deprecated?30:0}}>
       {/* <TopTabNavigator navigation={this.props.navigation}/> */}
       {navigationBar}
       {this.renderTrendingDialog()}
-      <TopTabNav/>
+      {TopTabNav&&<TopTabNav/>}
     </View>
   }
 }
 
-const mapStateToProps = (state) => ({
-  treading: state.treading
+const mapTrendingStateToProps = (state) => ({
+  keys: state.language.languages
 })
 
-const mapDispatchToProps = (dispatch) => ({
-  onLoadTreadingData: (storeName, url, pageSize,favoriteDao) => dispatch(actions.onLoadTreadingData(storeName, url, pageSize,favoriteDao)),
-  onLoadMoreTreading: (storeName,pageIndex,pageSize,items,favoriteDao,callBack) => dispatch(actions.onLoadMoreTreading(storeName,pageIndex,pageSize,items,favoriteDao,callBack))
+const mapTrendingDispatchToProps = (dispatch) => ({
+  onLoadLanguage: (flag) => dispatch(actions.onLoadLanguage(flag)),
 })
 
-const TreadingTabPage = connect(mapStateToProps,mapDispatchToProps)(TreadingTab)
+export default connect(mapTrendingStateToProps,mapTrendingDispatchToProps)(TrendingPage)
 
 const styles = StyleSheet.create({
   container: {
