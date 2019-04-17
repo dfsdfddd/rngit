@@ -221,7 +221,8 @@ class PopPage extends Component {
         },
         indicatorStyle:styles.indicatorStyle,
         labelStyle: styles.labelStyle
-      }
+      },
+      lazy: true
     })) : null
     return  <View style={{flex:1,marginTop:DeviceInfo.isIPhoneX_deprecated?30:0}}>
       {/* <TopTabNavigator navigation={this.props.navigation}/> */}

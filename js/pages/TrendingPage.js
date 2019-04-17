@@ -231,7 +231,8 @@ class TrendingPage extends Component {
           },
           indicatorStyle:styles.indicatorStyle,
           labelStyle: styles.labelStyle
-        }
+        },
+        lazy: true // 懒加载目录，每次只加载一个tab
       }))
     }
     return this.tabNav

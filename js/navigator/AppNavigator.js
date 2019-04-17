@@ -29,7 +29,7 @@ import TrendingPage from '../pages/TrendingPage';
 import MyPage from '../pages/MyPage';
 import AboutPage from "../pages/about/AboutPage";
 import AboutMePage from "../pages/about/AboutMePage";
-
+import CustomKeyPage from '../pages/CustomKeyPage';
 
 const BottomNav = createBottomTabNavigator({
   PopPage:{
@@ -100,6 +100,12 @@ const MainNavigator = createStackNavigator({
   },
   AboutMePage:{
     screen: AboutMePage,
+    navigationOptions:{
+      header:null// 设置headernull  禁用头部
+    }
+  },
+  CustomKeyPage:{
+    screen: CustomKeyPage,
     navigationOptions:{
       header:null// 设置headernull  禁用头部
     }
