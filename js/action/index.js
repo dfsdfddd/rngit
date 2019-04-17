@@ -1,4 +1,4 @@
-import {onThemeChange} from './theme';
+import {onThemeChange,onThemeInit,onShowCustomThemeView} from './theme';
 import {onLoadPopData,onLoadMorePop, onFlushPopularFavorite} from './pop';
 import {onLoadTreadingData,onLoadMoreTreading} from './treading';
 import {onLoadFavoriteData} from './favorite';
@@ -12,5 +12,7 @@ export default {
   onLoadMoreTreading,
   onLoadFavoriteData,
   onFlushPopularFavorite,
-  onLoadLanguage
+  onLoadLanguage,
+  onThemeInit,
+  onShowCustomThemeView
 }

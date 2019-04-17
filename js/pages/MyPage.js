@@ -57,6 +57,14 @@ export default class MyPage extends Component {
       case MORE_MENU.About:
         RouteName = 'AboutPage';
         break;
+      case MORE_MENU.Sort_Key:
+        RouteName = 'SortKeyPage';
+        params.flag = FLAG_LANGUAGE.flag_key
+        break;
+      case MORE_MENU.Sort_Language:
+        RouteName = 'SortKeyPage';
+        params.flag = FLAG_LANGUAGE.flag_language
+        break;
       case MORE_MENU.About_Author:
         RouteName = 'AboutMePage'
         break;
