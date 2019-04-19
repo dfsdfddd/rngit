@@ -25,7 +25,6 @@ import ArrayUtil from '../util/ArrayUtil';
 
 const EVENT_TYPE_TIME_SPAN_CHANGE = 'EVENT_TYPE_TIME_SPAN_CHANGE'
 const URL = `https://github.com/trending/`
-const THEME_COLOR = '#678'
 const pageSize = 10
 const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_trending)
 
@@ -35,7 +34,6 @@ class TreadingTab extends Component {
   constructor(props){
     super(props)
     const {tabLabel,timeSpan} = this.props
-    console.log(timeSpan);
     this.storeName = tabLabel
     this.timeSpan = timeSpan
   }
@@ -81,11 +79,14 @@ class TreadingTab extends Component {
     return URL + key + '?' +this.timeSpan.searchText
   }
   renderItem(data){
+    const {theme} = this.props
     const item = data.item
     return <TrendingItem
+      theme={theme}
       projectModes={item}
       onSelect={(callback)=>{
         NavigationUtil.goPage({
+          theme,
           projectModes:item,
           flag:FLAG_STORAGE.flag_trending,
           callback
@@ -105,6 +106,7 @@ class TreadingTab extends Component {
     </View>
   }
   render(){
+    const{theme} = this.props
     let store = this._store()
     return(
       <View style={styles.container}>
@@ -115,11 +117,11 @@ class TreadingTab extends Component {
           refreshControl={
             <RefreshControl
               title={'Loading'}
-              titleColor={THEME_COLOR}
-              colors={[THEME_COLOR]}
+              titleColor={theme.themeColor}
+              colors={[theme.themeColor]}
               refreshing={store.isLoading}
               onRefresh={()=>this.loadData()}
-              tintColor={THEME_COLOR}
+              tintColor={theme.themeColor}
             />
           }
           ListFooterComponent={()=>this.genIndicator()}
@@ -172,12 +174,12 @@ class TrendingPage extends Component {
 
   _genTab(){
     const tabs = {}
-    const {keys} = this.props
+    const {keys,theme} = this.props
     this.preKeys = keys
     keys.forEach((item,index) => {
       if(item.checked){
         tabs[`tab${index}`] = {
-          screen: props => <TreadingTabPage {...props} timeSpan={this.state.timeSpan} tabLabel={item.name}/>, // 这是个不错的技巧
+          screen: props => <TreadingTabPage theme={theme} {...props} timeSpan={this.state.timeSpan} tabLabel={item.name}/>, // 这是个不错的技巧
           navigationOptions:{
             title:item.name
           }
@@ -219,14 +221,17 @@ class TrendingPage extends Component {
     />
   }
   _tabNav(){
-    if(!this.tabNav || !ArrayUtil.isEqual(this.preKeys,this.props.keys)){
+    const {theme} = this.props;
+    // 主题🤒️变化需要重新渲染
+    if(theme !== this.theme||!this.tabNav || !ArrayUtil.isEqual(this.preKeys,this.props.keys)){
+      this.theme = theme
       this.tabNav = createAppContainer(createMaterialTopTabNavigator(this._genTab(),{
         tabBarOptions:{
           tabStyle: styles.tabStyle,
           upperCaseLabel: false,
           scrollEnabled: true,
           style: {
-            backgroundColor: '#678',
+            backgroundColor: theme.themeColor,
             height:30
           },
           indicatorStyle:styles.indicatorStyle,
@@ -238,16 +243,16 @@ class TrendingPage extends Component {
     return this.tabNav
   }
   render() {
-    const {keys} = this.props
+    const {keys,theme} = this.props
     let statusBar = {
-      backgroundColor:THEME_COLOR,
+      backgroundColor:theme.themeColor,
       barStyle:'light-content'
     }
     let navigationBar = <NavigationBar
       // title={'趋势'}
       titleView={this.renderTitleView()}
       statusBar={statusBar}
-      style={{backgroundColor:THEME_COLOR}}
+      style={theme.styles.navBar}
     />;
     // 使用路由，并且传递navigation 到新创建的路由
     const TopTabNav = keys.length ? this._tabNav() : null
@@ -261,7 +266,8 @@ class TrendingPage extends Component {
 }
 
 const mapTrendingStateToProps = (state) => ({
-  keys: state.language.languages
+  keys: state.language.languages,
+  theme: state.theme.theme
 })
 
 const mapTrendingDispatchToProps = (dispatch) => ({

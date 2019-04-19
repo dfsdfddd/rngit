@@ -83,10 +83,13 @@ class PopTab extends Component {
   }
   renderItem(data){
     const item = data.item
+    const {theme} = this.props
     return <PopularItem
       projectModes={item}
+      theme={theme}
       onSelect={(callback)=>{
         NavigationUtil.goPage({
+          theme,
           projectModes:item,
           flag:FLAG_STORAGE.flag_popular,
           callback
@@ -106,6 +109,7 @@ class PopTab extends Component {
   }
   render(){
     let store = this._store()
+    const {theme} = this.props
     return(
       <View style={styles.container}>
         <FlatList
@@ -115,11 +119,11 @@ class PopTab extends Component {
           refreshControl={
             <RefreshControl
               title={'Loading'}
-              titleColor={THEME_COLOR}
-              colors={[THEME_COLOR]}
+              titleColor={theme.themeColor}
+              colors={[theme.themeColor]}
               refreshing={store.isLoading}
               onRefresh={()=>this.loadData()}
-              tintColor={THEME_COLOR}
+              tintColor={theme.themeColor}
             />
           }
           ListFooterComponent={()=>this.genIndicator()}
@@ -183,11 +187,11 @@ class PopPage extends Component {
 
   _genTab(){
     const tabs = {}
-    const {keys} = this.props;
+    const {keys,theme} = this.props;
     keys.forEach((item,index) => {
       if(item.checked){
         tabs[`tab${index}`] = {
-          screen: props => <PopTabPage {...props} tabLabel={item.name}/>, // 这是个不错的技巧
+          screen: props => <PopTabPage {...props} tabLabel={item.name} theme={theme}/>, // 这是个不错的技巧
           navigationOptions:{
             title:item.name
           }
@@ -198,16 +202,16 @@ class PopPage extends Component {
     return tabs
   }
   render() {
-    const {keys} = this.props;
+    const {keys,theme} = this.props;
 
     let statusBar = {
-      backgroundColor:THEME_COLOR,
+      backgroundColor:theme.themeColor,
       barStyle:'light-content'
     }
     let navigationBar = <NavigationBar
       title={'最热'}
       statusBar={statusBar}
-      style={{backgroundColor:THEME_COLOR}}
+      style={theme.styles.navBar}
     />;
     // 使用路由，并且传递navigation 到新创建的路由
     const TopTabNav =keys.length ? createAppContainer(createMaterialTopTabNavigator(this._genTab(),{
@@ -216,7 +220,7 @@ class PopPage extends Component {
         upperCaseLabel: false,
         scrollEnabled: true,
         style: {
-          backgroundColor: '#678',
+          backgroundColor: theme.themeColor,
           height: 30
         },
         indicatorStyle:styles.indicatorStyle,
@@ -235,6 +239,7 @@ class PopPage extends Component {
 
 const mapPopStateToProps = (state) => ({
   keys: state.language.keys,
+  theme: state.theme.theme
 })
 
 const mapPopDispatchToProps = (dispatch) => ({

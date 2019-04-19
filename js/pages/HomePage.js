@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
-import { BackHandler } from 'react-native'; // android 后退需要
+import { BackHandler,View } from 'react-native'; // android 后退需要
 
 import {connect} from 'react-redux';
+import actions from '../action/index';
+
 
 // 导入页面
 import PopPage from './PopPage';
@@ -25,6 +27,7 @@ import NavigationUtil from '../navigator/NavigationUtil';
 import  DynamicTabNavigator  from "../navigator/DynamicTabNavigator";
 import BackPressComponent from '../common/BackPressComponent';
 
+import CustomTheme from './CustomTheme';
 
 
 const TABSB = {
@@ -176,6 +179,17 @@ class HomePage extends Component {
     const tabss = {PopPage,FavoriterPage,TrendingPage}
     return createAppContainer(createBottomTabNavigator(tabss))
   }
+
+  renderCustomThemeView(){
+    const {customThemeViewVisible,onShowCustomThemeView} = this.props
+    return (
+      <CustomTheme
+        visible={customThemeViewVisible}
+        {...this.props}
+        onClose={()=> onShowCustomThemeView(false)}
+      />
+    )
+  }
   /**
    * 第一种
    */
@@ -199,12 +213,18 @@ class HomePage extends Component {
     // const Tab = this._tabNavigator()
     // return <Tab/>
 
-    return <DynamicTabNavigator/>
+    return <View style={{flex:1}}>
+      <DynamicTabNavigator/>
+      {this.renderCustomThemeView()}
+    </View>
   }
 }
 
 const mapStateToProps = (state) => ({
-  nav: state.nav
+  nav: state.nav,
+  customThemeViewVisible: state.theme.customThemeViewVisible
 })
-
-export default connect(mapStateToProps)(HomePage)
+const mapDispatchToProps = (dispatch) => ({
+  onShowCustomThemeView: (show) => dispatch(actions.onShowCustomThemeView(show)),
+})
+export default connect(mapStateToProps,mapDispatchToProps)(HomePage)

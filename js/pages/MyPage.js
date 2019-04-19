@@ -10,9 +10,12 @@ import GlobalStyles from '../res/styles/GlobalStyles';
 import ViewUtil from '../util/ViewUtil';
 import { FLAG_LANGUAGE } from '../expand/dao/LanguageDao';
 
+import {connect} from 'react-redux';
+import actions from '../action/index';
+
 const THEME_COLOR = '#678'
 
-export default class MyPage extends Component {
+class MyPage extends Component {
 
   getRightButton(){
     return <View style={{flexDirection: 'row',}}>
@@ -42,7 +45,8 @@ export default class MyPage extends Component {
     </TouchableOpacity>
   }
   getItem(menu){
-    return ViewUtil.getMenuItem(()=>{this.onClick(menu)},menu,THEME_COLOR)
+    const {theme} = this.props
+    return ViewUtil.getMenuItem(()=>{this.onClick(menu)},menu,theme.themeColor)
   }
   onClick(menu){
     let RouteName,params={};
@@ -56,6 +60,10 @@ export default class MyPage extends Component {
         break;
       case MORE_MENU.About:
         RouteName = 'AboutPage';
+        break;
+      case MORE_MENU.Custom_Theme:
+        const{onShowCustomThemeView} = this.props
+        onShowCustomThemeView(true)
         break;
       case MORE_MENU.Sort_Key:
         RouteName = 'SortKeyPage';
@@ -81,14 +89,15 @@ export default class MyPage extends Component {
     }
   }
   render() {
+    const {theme} = this.props
     let statusBar = {
-      backgroundColor:THEME_COLOR,
+      backgroundColor:theme.themeColor,
       barStyle:'light-content'
     }
     let navigationBar = <NavigationBar
       title={'我的'}
       statusBar={statusBar}
-      style={{backgroundColor:THEME_COLOR}}
+      style={theme.styles.navBar}
       rightButton={this.getRightButton()}
       leftButton={this.getLeftButton()}
     />;
@@ -106,14 +115,14 @@ export default class MyPage extends Component {
           >
             <View style={styles.about_left}>
               <Ionicons
-                style={{marginRight: 10,color: THEME_COLOR}}
+                style={{marginRight: 10,color: theme.themeColor}}
                 name={MORE_MENU.About.icon}
                 size={40}
               />
               <Text>Github Popular</Text>
             </View>
             <Ionicons
-                style={{marginRight: 10,color: THEME_COLOR, alignSelf: 'center',}}
+                style={{marginRight: 10,color: theme.themeColor, alignSelf: 'center',}}
                 name={'ios-arrow-forward'}
                 size={16}
               />
@@ -145,7 +154,13 @@ export default class MyPage extends Component {
     );
   }
 }
-
+const mapStateToProps = (state) => ({
+  theme: state.theme.theme
+})
+const mapDispatchToProps = (dispatch) => ({
+  onShowCustomThemeView: (show) => dispatch(actions.onShowCustomThemeView(show)),
+})
+export default connect(mapStateToProps,mapDispatchToProps)(MyPage)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
