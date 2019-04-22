@@ -148,7 +148,7 @@ class CustomKeyPage extends Component {
     let views= []
     for (let i = 0,l = len; i < l; i+=2) {
       views.push(
-        <View keys={i}>
+        <View key={i}>
           <View style={styles.item}>
             {this.renderCheckBox(dataArray[i],i)}
             {i+1<len&&this.renderCheckBox(dataArray[i+1],i+1)}

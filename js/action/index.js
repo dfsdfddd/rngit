@@ -3,6 +3,8 @@ import {onLoadPopData,onLoadMorePop, onFlushPopularFavorite} from './pop';
 import {onLoadTreadingData,onLoadMoreTreading} from './treading';
 import {onLoadFavoriteData} from './favorite';
 import {onLoadLanguage} from './language';
+import {onSearch,onSearchCancel, onLoadMoreSearch} from './search';
+
 
 export default {
   onThemeChange,
@@ -14,5 +16,8 @@ export default {
   onFlushPopularFavorite,
   onLoadLanguage,
   onThemeInit,
-  onShowCustomThemeView
+  onShowCustomThemeView,
+  onSearch,
+  onSearchCancel,
+  onLoadMoreSearch
 }

@@ -2,7 +2,7 @@ import ProjectModel from "../model/ProjectModel";
 import Utils from "../util/Utils";
 
 
-export function handleData(actionType,dispatch, storeName, data, pageSize, favoriteDao){
+export function handleData(actionType,dispatch, storeName, data, pageSize, favoriteDao,params){
   let fixItems = []
   if(data&&data.data){
     if(Array.isArray(data.data)){
@@ -20,6 +20,7 @@ export function handleData(actionType,dispatch, storeName, data, pageSize, favor
       storeName,
       pageIndex:1,
       items: fixItems,
+      ...params
     })
   })
   
@@ -42,7 +43,11 @@ export async function _projectModels(showItems,favoriteDao,callback){
     //Utils.checkFavorite 检查item.id=key 是否在于keys 都列表里，存在就表示收藏了
     projectModels.push(new ProjectModel(showItems[i], Utils.checkFavorite(showItems[i], keys)));
   }
-  if(typeof callback === 'function'){
-    callback(projectModels)
+  doCallBack(callback,projectModels)
+}
+
+export const doCallBack = (callBack,object) => {
+  if(typeof callBack === "function"){
+    callBack(object)
   }
 }

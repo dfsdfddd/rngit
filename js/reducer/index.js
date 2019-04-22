@@ -4,6 +4,7 @@ import popular from './pop';
 import treading from './treading';
 import favorite from './favorite';
 import language from './language';
+import search from './search';
 import {rootCom, RootNavigator} from '../navigator/AppNavigator';
 
 
@@ -37,7 +38,8 @@ const navReducer = (state = navState, action) => {
    popular:popular,
    treading:treading,
    favorite:favorite,
-   language:language
+   language:language,
+   search:search
  })
 
  export default index

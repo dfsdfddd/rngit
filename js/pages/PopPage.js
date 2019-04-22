@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, ActivityIndicator, View, FlatList, RefreshControl, Text, DeviceInfo} from 'react-native';
+import {TouchableOpacity,StyleSheet, ActivityIndicator, View, FlatList, RefreshControl, Text, DeviceInfo} from 'react-native';
 import {connect} from 'react-redux';
 import actions from '../action/index';
 import PopularItem from '../common/PopularItem';
@@ -17,6 +17,7 @@ import NavigationBar from '../common/NavigationBar';
 import FavoriteDao from '../expand/dao/FavoriteDao';
 import { FLAG_STORAGE } from '../expand/dao/DataStore';
 import FavoriteUtil from '../util/FavoriteUtil';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const URL = `https://api.github.com/search/repositories?q=`
 const QUERY_STR = '&sort=stars'
@@ -107,6 +108,7 @@ class PopTab extends Component {
       <Text>正在加载更多</Text>
     </View>
   }
+
   render(){
     let store = this._store()
     const {theme} = this.props
@@ -201,6 +203,26 @@ class PopPage extends Component {
     });
     return tabs
   }
+  renderRightButton() {
+    const {theme} = this.props;
+    return <TouchableOpacity
+        onPress={() => {
+            // AnalyticsUtil.track("SearchButtonClick");
+            NavigationUtil.goPage({theme}, 'SearchPage')
+        }}
+    >
+        <View style={{padding: 5, marginRight: 8}}>
+            <Ionicons
+                name={'ios-search'}
+                size={24}
+                style={{
+                    marginRight: 8,
+                    alignSelf: 'center',
+                    color: 'white',
+                }}/>
+        </View>
+    </TouchableOpacity>
+}
   render() {
     const {keys,theme} = this.props;
 
@@ -212,6 +234,7 @@ class PopPage extends Component {
       title={'最热'}
       statusBar={statusBar}
       style={theme.styles.navBar}
+      rightButton={this.renderRightButton()}
     />;
     // 使用路由，并且传递navigation 到新创建的路由
     const TopTabNav =keys.length ? createAppContainer(createMaterialTopTabNavigator(this._genTab(),{
