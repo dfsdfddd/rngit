@@ -173,7 +173,7 @@ class DynamicTabNavigator extends Component {
     }
     const {PopPage,FavoriterPage,TrendingPage,MyPage} = TABSB
     const tabss = {PopPage,TrendingPage,FavoriterPage,MyPage} // 动态配置tab属性
-    PopPage.navigationOptions.tabBarLabel= 'sb'
+    PopPage.navigationOptions.tabBarLabel= '最热'
     return this.Tabss = createAppContainer(createBottomTabNavigator(tabss,{
       tabBarComponent: props => {
         return <TabBarComponent theme={this.props.theme} {...props}/>
