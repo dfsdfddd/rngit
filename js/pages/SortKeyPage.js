@@ -36,7 +36,7 @@ import LanguageDao, { FLAG_LANGUAGE } from '../expand/dao/LanguageDao';
 import BackPressComponent from '../common/BackPressComponent';
 import ViewUtil from '../util/ViewUtil';
 import ArrayUtil from '../util/ArrayUtil';
-
+import SafeAreaViewplus from '../common/SafeAreaViewplus';
 
 
 class SortKeyPage extends Component {
@@ -164,14 +164,17 @@ class SortKeyPage extends Component {
   }
   
   render() {
+    const {theme} = this.params
     let title = this.params.flag === FLAG_LANGUAGE.flag_language ? '语言排序' : '标签排序'
     let navigationBar = <NavigationBar
       title={title}
-      style={{backgroundColor:THEME_COLOR}}
+      style={theme.styles.navBar}
       leftButton={ViewUtil.getLeftBackButton(()=>this.onBack())}
       rightButton={ViewUtil.getRightButton("保存",()=>this.onSave())}
     />;
-    return <View style={styles.container}>
+    return <SafeAreaViewplus
+      topColor={theme.themeColor}
+    >
       {navigationBar}
       <SortableListView
         data={this.state.checkedArray}
@@ -182,7 +185,7 @@ class SortKeyPage extends Component {
         }}
         renderRow={row => <SortCell data={row} {...this.params}/>}
       />
-    </View>
+    </SafeAreaViewplus>
   }
 }
 
@@ -197,7 +200,7 @@ class SortCell extends Component {
         <MaterialCommunityIcons
           name={'sort'}
           size={16}
-          style={{marginRight: 10,color:THEME_COLOR}}
+          style={{marginRight: 10,color:this.props.theme.themeColor}}
         />
         <Text>{this.props.data.name}</Text>
       </View>

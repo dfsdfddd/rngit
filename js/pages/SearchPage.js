@@ -21,6 +21,7 @@ import FavoriteUtil from '../util/FavoriteUtil';
 
 import ViewUtil from '../util/ViewUtil';
 import Utils from '../util/Utils';
+import SafeAreaViewplus from '../common/SafeAreaViewplus';
 
 const URL = `https://api.github.com/search/repositories?q=`
 const QUERY_STR = '&sort=stars'
@@ -219,13 +220,15 @@ class SearchPage extends Component {
     {listView}
   </View>
     return(
-      <View style={styles.container}>
-        {statusBar}
-        {this.renderNavBar()}
-        {resultView}
-        {bottomButton}
-        <Toast ref={toast => this.toast = toast}/>
-      </View>
+      <SafeAreaViewplus
+        topColor={theme.themeColor}
+      >
+          {statusBar}
+          {this.renderNavBar()}
+          {resultView}
+          {bottomButton}
+          <Toast ref={toast => this.toast = toast}/>
+      </SafeAreaViewplus>
     )
   }
 };

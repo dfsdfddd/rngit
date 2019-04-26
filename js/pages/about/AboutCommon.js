@@ -4,19 +4,22 @@ import NavigationUtil from '../../navigator/NavigationUtil';
 import config from '../../res/data/config';
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
 import GlobalStyles from '../../res/styles/GlobalStyles';
-import {Platform,View,Text,Image,Dimensions,StyleSheet} from 'react-native';
+import {DeviceInfo,Platform,View,Text,Image,Dimensions,StyleSheet} from 'react-native';
 import ViewUtil from '../../util/ViewUtil';
 
 const THEME_COLOR = '#678'
 const AVATAR_SIZE = 90
 const PARALLAX_HEADER_HEIGHT = 270
-const STICKY_HEADER_HEIGHT= (Platform.OS==='ios') ? (GlobalStyles.nav_bar_height_ios + 20) : GlobalStyles.nav_bar_height_android
+const TOP = (Platform.OS === 'ios') ? 20 + (DeviceInfo.isIPhoneX_deprecated ? 24 : 0) : 0
+const STICKY_HEADER_HEIGHT= (Platform.OS==='ios') ? (GlobalStyles.nav_bar_height_ios + TOP) : GlobalStyles.nav_bar_height_android
 const window = Dimensions.get('window');
 export const FLAG_ABOUT = {flag_about:'about', flag_about_me: 'about_me'}
 
 export default class AboutCommon {
   constructor(props) {
     this.props = props
+    this.params = this.props.navigation.state.params;
+
     // this.upDateState = upDateState
     this.backPress = new BackPressComponent({backPress:()=>this.onBackPress()})
     // this.upDateState({data:config})
@@ -77,9 +80,10 @@ export default class AboutCommon {
     return config
   }
   render(contentView,params){
+    const{theme} = this.params
     const renderConfig = this.getParallaxRenderConfig111(params)
     return( <ParallaxScrollView
-        backgroundColor={THEME_COLOR}
+        backgroundColor={theme.themeColor}
         contentBackgroundColor={GlobalStyles.backgroundColor}
         parallaxHeaderHeight={PARALLAX_HEADER_HEIGHT}
         stickyHeaderHeight={STICKY_HEADER_HEIGHT}
@@ -106,11 +110,8 @@ const styles = StyleSheet.create({
   },
   stickySection: {
     height: STICKY_HEADER_HEIGHT,
-    width: 300,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    marginLeft: 40,
+    alignItems: 'center',
+    paddingTop: TOP,
   },
   stickySectionText: {
     color: 'white',
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
     top:0,
     bottom:0,
     paddingRight: 8,
-    paddingTop: (Platform.OS === 'ios') ? 20 :0,
+    paddingTop: TOP,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'

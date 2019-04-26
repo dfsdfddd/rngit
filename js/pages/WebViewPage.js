@@ -6,6 +6,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import NavigationUtil from '../navigator/NavigationUtil';
 import BackPressComponent from '../common/BackPressComponent';
 import FavoriteDao from '../expand/dao/FavoriteDao';
+import SafeAreaViewplus from '../common/SafeAreaViewplus';
 
 const THEME_COLOR = '#678'
 const TRENDING_URL = 'https://github.com/'
@@ -47,14 +48,15 @@ export default class WebViewPage extends Component {
     })
   }
   render() {
+    const{theme}=this.params
     let navigationBar = <NavigationBar
       leftButton={ViewUtil.getLeftBackButton(()=>this.onBackPress())}
       title={this.state.title}
-      style={{backgroundColor:THEME_COLOR}}
+      style={{backgroundColor:theme.themeColor}}
     />;
 
     return (
-      <View style={styles.container}>
+      <SafeAreaViewplus topColor={theme.themeColor}>
         {navigationBar}
         <WebView
           ref={webview=>this.webview = webview}
@@ -62,7 +64,7 @@ export default class WebViewPage extends Component {
           onNavigationStateChange={e=>this.onNavigationStateChange(e)}
           source={{uri:this.state.url}}
         ></WebView>
-      </View>
+      </SafeAreaViewplus>
     );
   }
 }

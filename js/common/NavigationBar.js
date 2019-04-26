@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ViewPropTypes,StyleSheet,StatusBar, Platform } from 'react-native';
+import { View, Text, ViewPropTypes,StyleSheet,StatusBar, Platform, DeviceInfo } from 'react-native';
 import {PropTypes} from 'prop-types';
 
 const StatusBarShape ={
@@ -9,7 +9,7 @@ const StatusBarShape ={
 }
 const NAV_BAR_HEIGHT_IOS = 44;
 const NAV_BAR_HEIGHT_ANDROID = 50;
-const STATUS_BAR_HEIGHT = 20;
+const STATUS_BAR_HEIGHT = DeviceInfo.isIPhoneX_deprecated ? 0 : 20;
 export default class NavigationBar extends Component {
   constructor(props) {
     super(props);

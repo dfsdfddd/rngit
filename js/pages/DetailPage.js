@@ -6,6 +6,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import NavigationUtil from '../navigator/NavigationUtil';
 import BackPressComponent from '../common/BackPressComponent';
 import FavoriteDao from '../expand/dao/FavoriteDao';
+import SafeAreaViewplus from '../common/SafeAreaViewplus';
 
 const THEME_COLOR = '#678'
 const TRENDING_URL = 'https://github.com/'
@@ -90,15 +91,17 @@ export default class DetailPage extends Component {
     />;
 
     return (
-      <View style={styles.container}>
-        {navigationBar}
-        <WebView
-          ref={webview=>this.webview = webview}
-          startInLoadingState={true}
-          onNavigationStateChange={e=>this.onNavigationStateChange(e)}
-          source={{uri:this.state.url}}
-        ></WebView>
-      </View>
+      <SafeAreaViewplus
+        topColor={theme.themeColor}
+      >
+          {navigationBar}
+          <WebView
+            ref={webview=>this.webview = webview}
+            startInLoadingState={true}
+            onNavigationStateChange={e=>this.onNavigationStateChange(e)}
+            source={{uri:this.state.url}}
+          ></WebView>
+      </SafeAreaViewplus>
     );
   }
 }

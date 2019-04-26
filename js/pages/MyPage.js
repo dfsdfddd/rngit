@@ -55,11 +55,14 @@ class MyPage extends Component {
         RouteName = 'WebViewPage';
         params.title= '教程';
         params.url = 'https://www.baidu.com/'
+        params.theme = this.props.theme
+
         // params.url = 'https://coding.m.imooc.com/classindex.html?cid=89'
         // params.url = 'http://58.250.168.182:48004/trust/openAcc'
         break;
       case MORE_MENU.About:
         RouteName = 'AboutPage';
+        params.theme = this.props.theme
         break;
       case MORE_MENU.Custom_Theme:
         const{onShowCustomThemeView} = this.props
@@ -67,19 +70,23 @@ class MyPage extends Component {
         break;
       case MORE_MENU.Sort_Key:
         RouteName = 'SortKeyPage';
+        params.theme = this.props.theme
         params.flag = FLAG_LANGUAGE.flag_key
         break;
       case MORE_MENU.Sort_Language:
         RouteName = 'SortKeyPage';
+        params.theme = this.props.theme
         params.flag = FLAG_LANGUAGE.flag_language
         break;
       case MORE_MENU.About_Author:
         RouteName = 'AboutMePage'
+        params.theme = this.props.theme
         break;
       case MORE_MENU.Custom_Key:
       case MORE_MENU.Custom_Language:
       case MORE_MENU.Remove_Key:
         RouteName = 'CustomKeyPage'
+        params.theme = this.props.theme
         params.isRemoveKey = menu === MORE_MENU.Remove_Key
         params.flag = menu !== MORE_MENU.Custom_Language ? FLAG_LANGUAGE.flag_key : FLAG_LANGUAGE.flag_language
         break;

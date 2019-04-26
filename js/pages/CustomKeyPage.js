@@ -34,6 +34,8 @@ import BackPressComponent from '../common/BackPressComponent';
 import ViewUtil from '../util/ViewUtil';
 import ArrayUtil from '../util/ArrayUtil';
 
+import SafeAreaViewplus from '../common/SafeAreaViewplus';
+
 
 
 class CustomKeyPage extends Component {
@@ -172,7 +174,7 @@ class CustomKeyPage extends Component {
     return <Ionicons
       name={checked?'ios-checkbox':'md-square-outline'}
       size={20}
-      style={{color: THEME_COLOR}}
+      style={{color: theme.themeColor}}
     />
   }
   renderCheckBox(data,index){
@@ -186,21 +188,24 @@ class CustomKeyPage extends Component {
   />
   }
   render() {
+    const {theme}=this.params
     let title = this.isRemoveKey ? '标签移除' : '自定义标签'
     title = this.params.flag === FLAG_LANGUAGE.flag_language ? '自定义语言' : title
     let rightButtonTitle = this.isRemoveKey ? '移除' : '保存'
     let navigationBar = <NavigationBar
       title={title}
-      style={{backgroundColor:THEME_COLOR}}
+      style={{backgroundColor:theme.themeColor}}
       leftButton={ViewUtil.getLeftBackButton(()=>this.onBack())}
       rightButton={ViewUtil.getRightButton(rightButtonTitle,()=>this.onSave())}
     />;
-    return <View style={styles.container}>
+    return <SafeAreaViewplus
+      topColor={theme.themeColor}
+    >
       {navigationBar}
       <ScrollView>
         {this.renderView()}
       </ScrollView>
-    </View>
+    </SafeAreaViewplus>
   }
 }
 

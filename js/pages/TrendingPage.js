@@ -256,7 +256,7 @@ class TrendingPage extends Component {
     />;
     // 使用路由，并且传递navigation 到新创建的路由
     const TopTabNav = keys.length ? this._tabNav() : null
-    return  <View style={{flex:1,marginTop:DeviceInfo.isIPhoneX_deprecated?30:0}}>
+    return  <View style={{flex:1}}>
       {/* <TopTabNavigator navigation={this.props.navigation}/> */}
       {navigationBar}
       {this.renderTrendingDialog()}

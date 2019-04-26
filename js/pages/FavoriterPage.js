@@ -174,7 +174,7 @@ class FavoriterPage extends Component {
         labelStyle: styles.labelStyle
       }
     }))
-    return  <View style={{flex:1,marginTop:DeviceInfo.isIPhoneX_deprecated?30:0}}>
+    return  <View style={{flex:1}}>
       {/* <TopTabNavigator navigation={this.props.navigation}/> */}
       {navigationBar}
       <TopTabNav/>

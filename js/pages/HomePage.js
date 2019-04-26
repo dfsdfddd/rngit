@@ -28,6 +28,7 @@ import  DynamicTabNavigator  from "../navigator/DynamicTabNavigator";
 import BackPressComponent from '../common/BackPressComponent';
 
 import CustomTheme from './CustomTheme';
+import SafeAreaViewPlus from '../common/SafeAreaViewplus';
 
 
 const TABSB = {
@@ -212,15 +213,18 @@ class HomePage extends Component {
      */
     // const Tab = this._tabNavigator()
     // return <Tab/>
-
-    return <View style={{flex:1}}>
+    const {theme} = this.props
+    return <SafeAreaViewPlus
+      topColor={theme.themeColor}
+    >
       <DynamicTabNavigator/>
       {this.renderCustomThemeView()}
-    </View>
+    </SafeAreaViewPlus>
   }
 }
 
 const mapStateToProps = (state) => ({
+  theme: state.theme.theme,
   nav: state.nav,
   customThemeViewVisible: state.theme.customThemeViewVisible
 })
