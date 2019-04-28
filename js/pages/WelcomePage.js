@@ -2,19 +2,20 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, View, Button} from 'react-native';
 // import NavigationUtil from '../navigator/NavigationUtil';
 
+// 导入启动屏设置
+import SplashScreen from 'react-native-splash-screen'
+
 export default class WelcomePage extends Component {
-  // componentDidMount(){
-  //   this.timer = setTimeout(() => {
-  //     // NavigationUtil.resetToHomePage({
-  //     //   navigation: this.props.navigation
-  //     // })
-  //     const {navigation} = this.props
-  //     navigation.navigate('Main')
-  //   }, 200);
-  // }
-  // componentWillUnmount(){
-  //   this.timer&&clearTimeout(this.timer)
-  // }
+  componentDidMount(){
+    this.timer = setTimeout(() => {
+      SplashScreen.hide();
+      const {navigation} = this.props
+      navigation.navigate('Main')
+    }, 200);
+  }
+  componentWillUnmount(){
+    this.timer&&clearTimeout(this.timer)
+  }
   
   render() {
     const {navigation} = this.props;
