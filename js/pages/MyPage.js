@@ -82,6 +82,10 @@ class MyPage extends Component {
         RouteName = 'AboutMePage'
         params.theme = this.props.theme
         break;
+      case MORE_MENU.CodePush:
+        RouteName = 'CodePushPage'
+        params.theme = this.props.theme
+        break;
       case MORE_MENU.Custom_Key:
       case MORE_MENU.Custom_Language:
       case MORE_MENU.Remove_Key:
@@ -102,7 +106,7 @@ class MyPage extends Component {
       barStyle:'light-content'
     }
     let navigationBar = <NavigationBar
-      title={'我的'}
+      title={'我的123'}
       statusBar={statusBar}
       style={theme.styles.navBar}
       rightButton={this.getRightButton()}
@@ -156,6 +160,8 @@ class MyPage extends Component {
           {this.getItem(MORE_MENU.Custom_Theme)}
           <View style={GlobalStyles.line}/>
           {this.getItem(MORE_MENU.Feedback)}
+          <View style={GlobalStyles.line}/>
+          {this.getItem(MORE_MENU.CodePush)}
         </ScrollView>
       </View>
     );

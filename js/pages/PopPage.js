@@ -231,7 +231,7 @@ class PopPage extends Component {
       barStyle:'light-content'
     }
     let navigationBar = <NavigationBar
-      title={'最热'}
+      title={'最热789'}
       statusBar={statusBar}
       style={theme.styles.navBar}
       rightButton={this.renderRightButton()}

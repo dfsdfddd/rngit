@@ -1,3 +1,4 @@
 <resources>
+	<string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey">ERDWFVuI_ZihT7BLEjBhLfGrQnDE5b4db05e-edd4-4e32-ad9b-c4df470715ab</string>
     <string name="app_name">RnGit</string>
 </resources>

@@ -32,6 +32,8 @@ import AboutMePage from "../pages/about/AboutMePage";
 import CustomKeyPage from '../pages/CustomKeyPage';
 import SortKeyPage from '../pages/SortKeyPage';
 import SearchPage from '../pages/SearchPage';
+import CodePushPage from '../pages/CodePushPage';
+
 
 const BottomNav = createBottomTabNavigator({
   PopPage:{
@@ -114,6 +116,12 @@ const MainNavigator = createStackNavigator({
   },
   SortKeyPage:{
     screen: SortKeyPage,
+    navigationOptions:{
+      header:null// 设置headernull  禁用头部
+    }
+  },
+  CodePushPage:{
+    screen: CodePushPage,
     navigationOptions:{
       header:null// 设置headernull  禁用头部
     }
