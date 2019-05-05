@@ -9,8 +9,8 @@ export default class WelcomePage extends Component {
   componentDidMount(){
     this.timer = setTimeout(() => {
       SplashScreen.hide();
-      const {navigation} = this.props
-      navigation.navigate('Main')
+      // const {navigation} = this.props
+      // navigation.navigate('Main')
     }, 200);
   }
   componentWillUnmount(){
