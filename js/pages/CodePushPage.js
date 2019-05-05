@@ -12,7 +12,7 @@ import SafeAreaViewplus from '../common/SafeAreaViewplus';
 import NavigationBar from '../common/NavigationBar';
 import ViewUtil from '../util/ViewUtil';
 
-
+// test git checkout
 
 import CodePush from "react-native-code-push";
 import NavigationUtil from '../navigator/NavigationUtil';
